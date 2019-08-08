@@ -90,7 +90,9 @@ class BOM(METARSource):
     def get_metar_info(self, airport_codes):
         """Queries the BOM website service."""
 
-        URL = 'http://www.bom.gov.au/aviation/php/process.php'
+        URL = (
+            'http://www.bom.gov.au/aviation/php/process.php'
+        )
 
         metars = {}
 
@@ -102,7 +104,7 @@ class BOM(METARSource):
 
         r = requests.post(URL, data=payload)
 
-        match = re.search(r'(?P<METAR>(METAR|SPECI).*?)<br />', r.text)
+        match = re.search(r'(METAR |SPECI )(?P<METAR>.*?)<br />', r.text)
 
         if match:
             try:
