@@ -104,11 +104,11 @@ class BOM(METARSource):
 
         r = requests.post(URL, data=payload)
 
-        match = re.search(r'(METAR |SPECI )(?P<METAR>.*?)<br />', r.text)
+        match = re.findall(r'(?:METAR |SPECI )(?P<METAR>.*?)(?:<br />|<h3>)', r.text)
 
         if match:
             try:
-                metars = match.group('METAR')
+                metars = match
             except AttributeError:
                 metars = None
         return metars
