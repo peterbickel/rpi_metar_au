@@ -97,7 +97,7 @@ class BOM(METARSource):
         metars = {}
 
         payload = {
-            'keyword': airport_codes,
+            'keyword': {airport_codes},
             'type': 'search',
             'page': 'TAF'
         }
