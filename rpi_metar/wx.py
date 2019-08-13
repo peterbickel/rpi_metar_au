@@ -27,6 +27,21 @@ def get_conditions(metar_info):
     # We may have fractions, e.g. 1/8SM or 1 1/2SM
     # Or it will be whole numbers, e.g. 2SM
     # There's also variable wind speeds, followed by vis, e.g. 300V360 1/2SM
+
+    # Match metric visibility and convert to SM
+    match = re.search(r'(?P<CAVOK>CAVOK)|(\s(?P<visibility>\d{4}|\/{4})\s)', metar_info)
+    if match.group('visibility'):
+        visibility = match.group('visibility')
+        try:
+            visibility = float(visibility) / 1609
+        except ZeroDivisionError:
+            visibility = None
+        except ValueError:
+            visibility = None
+    #if match.group('CAVOK'):
+    #    visibility = 10
+
+    # Match SM Visibility
     match = re.search(r'(?P<visibility>\b(?:\d+\s+)?\d+(?:/\d)?)SM', metar_info)
     if match:
         visibility = match.group('visibility')
@@ -35,9 +50,11 @@ def get_conditions(metar_info):
         except ZeroDivisionError:
             visibility = None
     # Ceiling
-    match = re.search(r'(VV|BKN|OVC)(?P<ceiling>\d{3})', metar_info)
-    if match:
+    match = re.search(r'(?P<nilcloud>NCD|CAVOK|(VV|SCT|BKN|OVC)(?P<ceiling>\d{3}))', metar_info)
+    if match.group('ceiling'):
         ceiling = int(match.group('ceiling')) * 100  # It is reported in hundreds of feet
+    if match.group('nilcloud'):
+        ceiling = 10000
     # Wind info
     match = re.search(r'\b\d{3}(?P<speed>\d{2,3})G?(?P<gust>\d{2,3})?KT', metar_info)
     if match:
