@@ -51,7 +51,7 @@ def get_conditions(metar_info):
             visibility = None
     # Ceiling
     match = re.search(r'(?P<nilcloud>NCD|CAVOK|(VV|SCT|BKN|OVC)(?P<ceiling>\d{3}))', metar_info)
-    if match.group('ceiling'):
+    if match:# .group('ceiling'):
         ceiling = int(match.group('ceiling')) * 100  # It is reported in hundreds of feet
     #if match.group('nilcloud'):
     #    ceiling = 10000
