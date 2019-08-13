@@ -10,12 +10,12 @@ log = logging.getLogger(__name__)
 
 class FlightCategory(Enum):
     VFR = GREEN
-    IFR = YELLOW
+    IFR = RED
     MVFR = BLUE
-    LIFR = RED
-    UNKNOWN = WHITE
+    LIFR = MAGENTA
+    UNKNOWN = YELLOW
     OFF = BLACK
-    MISSING = MAGENTA
+    MISSING = ORANGE
 
 
 def get_conditions(metar_info):
