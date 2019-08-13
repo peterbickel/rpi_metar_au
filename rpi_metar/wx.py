@@ -38,8 +38,8 @@ def get_conditions(metar_info):
             visibility = None
         except ValueError:
             visibility = None
-    if match.group('CAVOK'):
-        visibility = 10
+    #if match.group('CAVOK'):
+    #    visibility = 10
 
     # Match SM Visibility
     match = re.search(r'(?P<visibility>\b(?:\d+\s+)?\d+(?:/\d)?)SM', metar_info)
