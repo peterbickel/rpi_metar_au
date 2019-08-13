@@ -24,6 +24,20 @@ def get_conditions(metar_info):
     visibility = ceiling = None
     speed = gust = 0
     # Visibility
+
+    # Match metric visibility and convert to SM
+    match = re.search(r'(?P<CAVOK>CAVOK)|(\s(?P<visibility>\d{4}|\/{4})\s)', metar_info)
+    if match: #.group('visibility'):
+        visibility = match.group('visibility')
+        try:
+            visibility = float(visibility) / 1609
+        except ZeroDivisionError:
+            visibility = None
+        except ValueError:
+            visibility = None
+    #if match.group('CAVOK'):
+    #    visibility = 10
+
     # We may have fractions, e.g. 1/8SM or 1 1/2SM
     # Or it will be whole numbers, e.g. 2SM
     # There's also variable wind speeds, followed by vis, e.g. 300V360 1/2SM
