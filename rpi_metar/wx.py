@@ -30,7 +30,7 @@ def get_conditions(metar_info):
 
     # Match metric visibility and convert to SM
     match = re.search(r'(?P<CAVOK>CAVOK)|(\s(?P<visibility>\d{4}|\/{4})\s)', metar_info)
-    if match:
+    if match.group('visibility'):
         visibility = match.group('visibility')
         try:
             visibility = float(visibility) / 1609
@@ -38,6 +38,8 @@ def get_conditions(metar_info):
             visibility = None
         except ValueError:
             visibility = None
+    if match.group('CAVOK'):
+        visibility = 10
 
 
     # Match SM Visibility
@@ -53,7 +55,7 @@ def get_conditions(metar_info):
     if match.group('ceiling'):
         ceiling = int(match.group('ceiling')) * 100  # It is reported in hundreds of feet
     if match.group('nilcloud'):
-        ceiling = 10
+        ceiling = 10000
     # Wind info
     match = re.search(r'\b\d{3}(?P<speed>\d{2,3})G?(?P<gust>\d{2,3})?KT', metar_info)
     if match:
