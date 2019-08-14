@@ -10,10 +10,10 @@ log = logging.getLogger(__name__)
 
 class FlightCategory(Enum):
     VFR = GREEN
-    IFR = RED
+    IFR = YELLOW
     MVFR = BLUE
-    LIFR = MAGENTA
-    UNKNOWN = YELLOW
+    LIFR = RED
+    UNKNOWN = MAGENTA
     OFF = BLACK
     MISSING = ORANGE
 
