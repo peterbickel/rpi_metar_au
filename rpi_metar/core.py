@@ -11,7 +11,7 @@ import threading
 from configparser import ConfigParser
 from rpi_ws281x import PixelStrip
 from rpi_metar import cron, sources, encoder
-from rpi_metar.leds import BLACK, YELLOW, WHITE, GAMMA
+from rpi_metar.leds import BLACK, YELLOW, WHITE, GAMMA, ORANGE
 from rpi_metar.airports import Airport, LED_QUEUE, MAX_WIND_SPEED_KTS
 from rpi_metar.wx import FlightCategory
 from queue import Queue
@@ -202,7 +202,7 @@ def wind(leds, event, cfg):
             # We want wind indicators to appear simultaneously.
             with leds.lock:
                 for airport in windy_airports:
-                    leds.setPixelColor(airport.index, YELLOW)
+                    leds.setPixelColor(airport.index, ORANGE)
                 leds.show()
                 time.sleep(indicator_duration)
 
