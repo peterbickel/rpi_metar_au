@@ -50,7 +50,7 @@ def fetch_metars(queue, cfg):
 
     airport_codes = list(AIRPORTS.keys())
     data_sources = []
-    for source in [sources.BOM, sources.NOAA]:
+    for source in [sources.NOAA, sources.BOM]:
         try:
             data_sources.append(source(airport_codes))
         except:
