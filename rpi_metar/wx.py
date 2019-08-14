@@ -50,7 +50,7 @@ def get_conditions(metar_info):
         except ZeroDivisionError:
             visibility = None
     # Ceiling
-    match = re.search(r'(VV|BKN|OVC)(?P<ceiling>\d{3})', metar_info)
+    match = re.search(r'(SCT|VV|BKN|OVC)(?P<ceiling>\d{3})', metar_info)
     if match:
         ceiling = int(match.group('ceiling')) * 100  # It is reported in hundreds of feet
     # Wind info
