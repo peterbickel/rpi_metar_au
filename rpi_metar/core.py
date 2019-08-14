@@ -202,7 +202,7 @@ def wind(leds, event, cfg):
             # We want wind indicators to appear simultaneously.
             with leds.lock:
                 for airport in windy_airports:
-                    leds.setPixelColor(airport.index, YELLOW)
+                    leds.setPixelColor(airport.index, ORANGE)
                 leds.show()
                 time.sleep(indicator_duration)
 
