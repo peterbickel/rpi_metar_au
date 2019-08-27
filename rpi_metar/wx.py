@@ -21,7 +21,7 @@ class FlightCategory(Enum):
 def get_conditions(metar_info):
     """Returns the visibility, ceiling, wind speed, and gusts for a given airport from some metar info."""
     log.debug(metar_info)
-    visibility = ceiling = None
+    visibility = ceiling = 10000
     speed = gust = 0
     # Visibility
 
@@ -31,7 +31,7 @@ def get_conditions(metar_info):
         try:
             visibility = float(match.group('visibility')) / 1609
         except ValueError:
-            visibility = None
+            visibility = 10
     if match.group('CAVOK'):
         visibility = 10
 
