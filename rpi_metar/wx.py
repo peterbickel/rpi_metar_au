@@ -13,9 +13,9 @@ class FlightCategory(Enum):
     IFR = YELLOW
     MVFR = BLUE
     LIFR = RED
-    UNKNOWN = WHITE
+    UNKNOWN = BLACK
     OFF = BLACK
-    MISSING = ORANGE
+    MISSING = MAGENTA
 
 
 def get_conditions(metar_info):
