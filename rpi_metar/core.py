@@ -11,7 +11,7 @@ import threading
 from configparser import ConfigParser
 from rpi_ws281x import PixelStrip
 from rpi_metar import cron, sources, encoder
-from rpi_metar.leds import BLACK, YELLOW, ORANGE, WHITE, GAMMA
+from rpi_metar.leds import BLACK, YELLOW, ORANGE, WHITE, GAMMA, MAGENTA
 from rpi_metar.airports import Airport, LED_QUEUE, MAX_WIND_SPEED_KTS, Legend
 from rpi_metar.wx import FlightCategory
 from queue import Queue
@@ -182,7 +182,7 @@ def render_leds(queue, leds, cfg):
 
 
 def lightning(leds, event, cfg):
-    """Briefly changes LEDs to white, indicating lightning in the area."""
+    """Briefly changes LEDs to magenta, indicating lightning in the area."""
     airports = AIRPORTS.values()
     strike_duration = cfg.getfloat('settings', 'lightning_duration', fallback=1.0)
     legend = cfg.getint('legend', 'lightning', fallback=None)
@@ -194,7 +194,7 @@ def lightning(leds, event, cfg):
         if ts_airports:
             with leds.lock:
                 for airport in ts_airports:
-                    leds.setPixelColor(airport.index, WHITE)
+                    leds.setPixelColor(airport.index, MAGENTA)
                 leds.show()
                 time.sleep(strike_duration)
 
