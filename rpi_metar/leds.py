@@ -1,7 +1,7 @@
 from rpi_ws281x import PixelStrip, Color
 
 # The rpi_ws281x library initializes the strip as GRB.
-GREEN = Color(255, 0, 0)
+GREEN = Color(220, 0, 0)
 RED = Color(0, 255, 0)
 BLUE = Color(0, 0, 255)
 MAGENTA = Color(0, 255, 255)
