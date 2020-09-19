@@ -189,7 +189,7 @@ class BOM(METARSource):
                           'NZWF', 'NZWN', 'NZWS', 'NZWK', 'NZWU', 'NZWR', 'NZWP', 'NZWB'}
 
         def __init__(self, airport_codes, *, config, **kwargs):
-            self.airport_codes = ' '.join(airport_codes)
+            self.airport_codes = airport_codes
             self.login_payload = {
                 "UserName": "Thommo17",
                 "Password": "METARMAPS1"
