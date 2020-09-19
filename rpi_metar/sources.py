@@ -206,7 +206,7 @@ class BOM(METARSource):
                 r = session.post(self.URL, data=self.data_payload)
                 log.info(r.text)
 
-            matches = re.findall(r'(?:METAR |SPECI )(?P<METAR>(?P<CODE>\w{4}).*?)(?:<br />|<h3>)', r.text)
+            matches = re.findall(r'(?:METAR |SPECI )(?P<METAR>(?P<CODE>\w{4}).*?)(?:<br />|<h3>|=</span>)', r.text)
 
             metars = {}
 
