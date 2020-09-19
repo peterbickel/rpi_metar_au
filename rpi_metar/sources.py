@@ -177,42 +177,42 @@ class BOM(METARSource):
 
         return metars
 
+
 class IFIS(METARSource):
-        URL = 'https://www.ifis.airways.co.nz/script/briefing/met_briefing_proc.asp'
-        LOGIN_URL = 'https://www.ifis.airways.co.nz/secure/script/user_reg/login_proc.asp'
+    URL = 'https://www.ifis.airways.co.nz/script/briefing/met_briefing_proc.asp'
+    LOGIN_URL = 'https://www.ifis.airways.co.nz/secure/script/user_reg/login_proc.asp'
 
-        # If any airport code outside of this list is used the website will throw an error (eg. MET Locations: the following locations do not issue the requested MET report types: YBBN)
-        ACCEPTED_CODES = {'NZCH', 'NZCI', 'NZAA', 'NZDN', 'NZGS', 'NZHN', 'NZHK', 'NZNV', 'NZKK', 'NZMS', 'NZMF',
-                          'NZNR',
-                          'NZNS', 'NZNP', 'NZOU', 'NZOH', 'NZPM', 'NZPP', 'NZQN', 'NZRO', 'NZAP', 'NZTG', 'NZMO',
-                          'NZTU',
-                          'NZWF', 'NZWN', 'NZWS', 'NZWK', 'NZWU', 'NZWR', 'NZWP', 'NZWB'}
+    # If any airport code outside of this list is used the website will throw an error (eg. MET Locations: the following locations do not issue the requested MET report types: YBBN)
+    ACCEPTED_CODES = {'NZCH', 'NZCI', 'NZAA', 'NZDN', 'NZGS', 'NZHN', 'NZHK', 'NZNV', 'NZKK', 'NZMS', 'NZMF', 'NZNR',
+                      'NZNS', 'NZNP', 'NZOU', 'NZOH', 'NZPM', 'NZPP', 'NZQN', 'NZRO', 'NZAP', 'NZTG', 'NZMO', 'NZTU',
+                      'NZWF', 'NZWN', 'NZWS', 'NZWK', 'NZWU', 'NZWR', 'NZWP', 'NZWB'}
 
-        def __init__(self, airport_codes, *, config, **kwargs):
-            self.airport_codes = ' '.join([code for code in airport_codes if code in IFIS.ACCEPTED_CODES])
-            self.username = config['ifis']['username']
-            self.password = config['ifis']['password']
-            self.login_payload = {
-                "UserName": "Thommo17",
-                "Password": "METARMAPS1"
-            }
-            self.data_payload = {
-                'METAR': 1,
-                'MetLocations': 'NZCH',
-            }
+    def __init__(self, airport_codes, *, config, **kwargs):
+        self.airport_codes = ' '.join([code for code in airport_codes if code in IFIS.ACCEPTED_CODES])
+        self.username = config['ifis']['username']
+        self.password = config['ifis']['password']
+        self.login_payload = {
+            'UserName': 'Thommo17',
+            'Password': 'METARMAPS1',
+        }
+        self.data_payload = {
+            'METAR': 1,
+            'MetLocations': self.airport_codes,
+        }
 
-        def get_metar_info(self):
-            with requests.Session() as session:
-                session.post(self.LOGIN_URL, data=self.login_payload)
+    def get_metar_info(self):
+        with requests.Session() as session:
+            session.post(self.LOGIN_URL, data=self.login_payload)
 
-                r = session.post(self.URL, data=self.data_payload)
-                log.info(r.text)
+            r = session.post(self.URL, data=self.data_payload)
+            log.info(r.text)
 
-            matches = re.findall(r'(?:METAR |SPECI )(?P<METAR>(?P<CODE>\w{4}).*?)(?:<br />|<h3>|=</span>)', r.text)
+        matches = re.findall(r'(?:METAR |SPECI )(?P<METAR>(?P<CODE>\w{4}).*?)(?:<br/>|<h3>)', r.text)
 
-            metars = {}
+        metars = {}
 
-            for match in matches:
-                info = match.groupdict()
-                metars[info['CODE'].upper()] = {'raw_text': info['METAR']}
-            return metars
+        for match in matches:
+            info = match.groupdict()
+            metars[info['CODE'].upper()] = {'raw_text': info['METAR']}
+
+        return metars
