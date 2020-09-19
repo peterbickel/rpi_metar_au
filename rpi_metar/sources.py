@@ -198,7 +198,7 @@ class IFIS(METARSource):
             }
             self.data_payload = {
                 'METAR': 1,
-                'MetLocations': self.airport_codes,
+                'MetLocations': 'NZCH',
             }
 
         def get_metar_info(self):
