@@ -177,7 +177,7 @@ class BOM(METARSource):
 
         return metars
 
-    class IFIS(METARSource):
+class IFIS(METARSource):
         URL = 'https://www.ifis.airways.co.nz/script/briefing/met_briefing_proc.asp'
         LOGIN_URL = 'https://www.ifis.airways.co.nz/secure/script/user_reg/login_proc.asp'
 
@@ -189,14 +189,16 @@ class BOM(METARSource):
                           'NZWF', 'NZWN', 'NZWS', 'NZWK', 'NZWU', 'NZWR', 'NZWP', 'NZWB'}
 
         def __init__(self, airport_codes, *, config, **kwargs):
-            self.airport_codes = airport_codes
+            self.airport_codes = ' '.join([code for code in airport_codes if code in IFIS.ACCEPTED_CODES])
+            self.username = config['ifis']['username']
+            self.password = config['ifis']['password']
             self.login_payload = {
-                "UserName": "Thommo17",
-                "Password": "METARMAPS1"
-}
+                'UserName': self.username,
+                'Password': self.password,
+            }
             self.data_payload = {
                 'METAR': 1,
-                'MetLocations': 'NZCH',
+                'MetLocations': self.airport_codes,
             }
 
         def get_metar_info(self):
