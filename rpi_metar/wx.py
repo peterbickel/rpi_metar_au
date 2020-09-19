@@ -26,15 +26,13 @@ def get_conditions(metar_info):
     # Visibility
 
     # Match metric visibility and convert to SM
-    match = re.search(r'(?P<CAVOK>CAVOK)|(\s(?P<visibility>\d{4}|\/{4})\s)|(\s(?P<visibilityKM>\d{2}.[KM]|\/{2})\s)', metar_info)
+    match = re.search(r'(?P<CAVOK>CAVOK)|(\s(?P<visibility>\d{4}|\/{4})\s)', metar_info)
     if match.group('visibility'):
         try:
             visibility = float(match.group('visibility')) / 1609
         except ValueError:
             visibility = 10
     if match.group('CAVOK'):
-        visibility = 10
-    if match.group('visibilityKM'):
         visibility = 10
 
     # Match SM Visibility
@@ -49,11 +47,9 @@ def get_conditions(metar_info):
         except ZeroDivisionError:
             visibility = None
     # Ceiling
-    match = re.search(r'(SCT|VV|BKN|OVC)(?P<ceiling>\d{3})|(?P<NCD> NCD )', metar_info)
+    match = re.search(r'(SCT|VV|BKN|OVC)(?P<ceiling>\d{3})', metar_info)
     if match:
         ceiling = int(match.group('ceiling')) * 100  # It is reported in hundreds of feet
-    if match.group('NCD'):
-        ceiling = 10000
     # Wind info
     match = re.search(r'\b\d{3}(?P<speed>\d{2,3})G?(?P<gust>\d{2,3})?KT', metar_info)
     if match:
