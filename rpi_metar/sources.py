@@ -192,8 +192,8 @@ class IFIS(METARSource):
         self.username = config['ifis']['username']
         self.password = config['ifis']['password']
         self.login_payload = {
-            'UserName': 'Thommo17',
-            'Password': 'METARMAPS1',
+            'UserName': self.username,
+            'Password': self.password,
         }
         self.data_payload = {
             'METAR': 1,
@@ -207,7 +207,7 @@ class IFIS(METARSource):
             r = session.post(self.URL, data=self.data_payload)
             log.info(r.text)
 
-        matches = re.findall(r'(?:METAR |SPECI )(?P<METAR>(?P<CODE>\w{4}).*?)(?:<br/>|<h3>|=</span>)', r.text)
+        matches = re.findall(r'(?:METAR |SPECI )(?P<METAR>(?P<CODE>\w{4}).*?)(?:<br/>|<h3>)', r.text)
 
         metars = {}
 
