@@ -193,8 +193,8 @@ class IFIS(METARSource):
             self.username = config['ifis']['username']
             self.password = config['ifis']['password']
             self.login_payload = {
-                'UserName': self.username,
-                'Password': self.password,
+                "UserName": "Thommo17",
+                "Password": "METARMAPS1"
             }
             self.data_payload = {
                 'METAR': 1,
