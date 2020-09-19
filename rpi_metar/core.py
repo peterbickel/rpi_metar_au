@@ -58,7 +58,7 @@ def fetch_metars(queue, cfg):
         airport_codes = set(AIRPORTS.keys())
         for source in srcs:
             try:
-                data_source = source(list(airport_codes))
+                data_source = source(list(airport_codes), config=cfg)
             except:  # noqa
                 log.exception('Unable to create data source.')
                 continue
@@ -311,7 +311,7 @@ def set_legend(leds, cfg):
 
     for category in [FlightCategory.VFR, FlightCategory.IFR, FlightCategory.MVFR, FlightCategory.LIFR]:
         index = cfg.getint('legend', category.name.casefold(), fallback=None)
-        if index:
+        if index is not None:
             leds.setPixelColor(index, category.value)
             log.debug('Legend: set %s to %s.', index, category.name)
 
@@ -326,7 +326,6 @@ def get_num_leds(cfg):
         legend_max = max((int(v) for v in cfg['legend'].values()))
 
     return max([airport_max, legend_max]) + 1
-
 
 
 def main():
@@ -346,10 +345,6 @@ def main():
 
     cfg = load_configuration()
 
-    if cfg.getboolean('settings', 'papertrail', fallback=True):
-        from rpi_metar import papertrail
-        logger = logging.getLogger('rpi_metar')
-        logger.addHandler(papertrail)
 
     kwargs = {
         'num': get_num_leds(cfg),
