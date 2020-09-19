@@ -190,12 +190,10 @@ class BOM(METARSource):
 
         def __init__(self, airport_codes, *, config, **kwargs):
             self.airport_codes = ' '.join([code for code in airport_codes if code in IFIS.ACCEPTED_CODES])
-            self.username = config['ifis']['username']
-            self.password = config['ifis']['password']
             self.login_payload = {
-                'UserName': self.username,
-                'Password': self.password,
-            }
+                "UserName": "Thommo17",
+                "Password": "METARMAPS1"
+}
             self.data_payload = {
                 'METAR': 1,
                 'MetLocations': self.airport_codes,
