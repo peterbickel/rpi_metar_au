@@ -46,7 +46,7 @@ class NOAA(METARSource):
         '&stationString={airport_codes}'
     )
 
-    def __init__(self, airport_codes, subdomain='www'):
+    def __init__(self, airport_codes, subdomain='www', **kwargs):
         self.airport_codes = airport_codes
         self.subdomain = subdomain
 
@@ -79,8 +79,8 @@ class NOAA(METARSource):
 
 class NOAABackup(NOAA):
 
-    def __init__(self, airport_codes):
-        super(NOAABackup, self).__init__(airport_codes, subdomain='bcaws')
+    def __init__(self, airport_codes, **kwargs):
+        super(NOAABackup, self).__init__(airport_codes, subdomain='bcaws', **kwargs)
 
 
 class SkyVector(METARSource):
@@ -116,7 +116,7 @@ class SkyVector(METARSource):
 
         self.url = SkyVector.URL.format(lat1=lat1, lon1=lon1, lat2=lat2, lon2=lon2)
 
-    def __init__(self, airport_codes):
+    def __init__(self, airport_codes, **kwargs):
         # Set lat / long info for the request...
         self.airport_codes = [code.upper() for code in airport_codes]
         self._find_coordinates()
@@ -155,7 +155,7 @@ class BOM(METARSource):
 
     URL = 'http://www.bom.gov.au/aviation/php/process.php'
 
-    def __init__(self, airport_codes):
+    def __init__(self, airport_codes, **kwargs):
         self.airport_codes = ','.join(airport_codes)
 
     def get_metar_info(self):
