@@ -34,8 +34,7 @@ def get_conditions(metar_info):
             visibility = 10
     if match.group('CAVOK'):
         visibility = 10
-    if match.group('visibilityKM'):
-        visibility = 10
+
 
     # Match SM Visibility
     # We may have fractions, e.g. 1/8SM or 1 1/2SM
