@@ -26,7 +26,7 @@ def get_conditions(metar_info):
     # Visibility
 
     # Match metric visibility and convert to SM
-    match = re.search(r'(?P<CAVOK>CAVOK)|(\s(?P<visibility>\d{4}|\/{4})\s)|(\s(?P<visibilityKM>\d{2}.[KM]|\/{2})\s)', metar_info)
+    match = re.search(r'(?P<CAVOK>CAVOK)|(\s(?P<visibility>\d{4}|\/{4})\s)', metar_info)
     if match.group('visibility'):
         try:
             visibility = float(match.group('visibility')) / 1609
