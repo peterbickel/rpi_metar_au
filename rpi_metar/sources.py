@@ -168,7 +168,7 @@ class BOM(METARSource):
 
         r = requests.post(self.URL, data=payload)
 
-        matches = re.finditer(r'(?:METAR |SPECI )(?P<METAR>(?P<CODE>\w{4}).*?)(?:<br />|<h3>)', r.text)
+        matches = re.finditer(r'(?:METAR |SPECI )(?P<METAR>(?P<CODE>\w{4}).*?)(?:</p>|<h3>)', r.text)
 
         metars = {}
         for match in matches:
