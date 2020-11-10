@@ -85,7 +85,7 @@ class Airport(object):
             return
 
         # Thunderstorms
-        self.thunderstorms = any(word in metar['raw_text'] for word in ['TSRA', 'VCTS', 'THUNDERSTORMS', 'TSGR', 'TSRASN', 'DL-N', 'DL-NE', 'DL-E', 'DL-SE', 'DL-S', 'DL-SW', 'DL-W', 'DL-NW', 'HEAVY', ' TS ', 'DL-', 'LIGHTNING']) and self.category != wx.FlightCategory.OFF
+        self.thunderstorms = any(word in metar['raw_text'] for word in ['TSRA', 'VCTS', 'THUNDERSTORMS', 'TSGR', 'TSRASN', 'DL-N', 'DL-NE', 'DL-E', 'DL-SE', 'DL-S', 'DL-SW', 'DL-W', 'DL-NW', 'HEAVY', ' TS ', 'DL-', 'LIGHTNING', 'DL-N/DL-NW']) and self.category != wx.FlightCategory.OFF
 
         # Wind info
         try:
