@@ -223,7 +223,7 @@ class NZLINK(METARSource):
     # This URL is the page you actually want to pull down with requests.
     METBRIEF = 'http://www.linknetwork.co.nz/FlightPlan?employeeId=MTQxNg%3D%3D-kX8FP2rHakU%3D&fbclid=IwAR3lgqR4kgdYp0oiwD6LuxBeaKGY1QaDhBdUitnfuzeWQesSNdiCJo61NTk'
 
-    def __init__(self, *, **kwargs):
+
 
     def get_metar_info(self):
         with requests.Session() as session:
