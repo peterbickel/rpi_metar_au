@@ -1,14 +1,14 @@
 from rpi_ws281x import PixelStrip, Color
 
 # The rpi_ws281x library initializes the strip as GRB.
-GREEN = Color(220, 0, 0)
+GREEN = Color(255, 0, 0)
 RED = Color(0, 255, 0)
 BLUE = Color(0, 0, 255)
 MAGENTA = Color(0, 255, 255)
-YELLOW = Color(245, 245, 0)
+YELLOW = Color(255, 255, 0)
 BLACK = Color(0, 0, 0)
 WHITE = Color(255, 255, 255)
-ORANGE = Color(150, 255, 0)
+ORANGE = Color(205, 255, 0)
 
 # For gamma correction
 # https://learn.adafruit.com/led-tricks-gamma-correction/the-issue
