@@ -9,11 +9,11 @@ log = logging.getLogger(__name__)
 
 
 class FlightCategory(Enum):
-    VFR = GREEN
-    IFR = YELLOW
-    MVFR = BLUE
+    VFR = BLUE
+    IFR = ORANGE
+    MVFR = GREEN
     LIFR = RED
-    UNKNOWN = BLACK
+    UNKNOWN = YELLOW
     OFF = BLACK
     MISSING = MAGENTA
 
@@ -25,11 +25,11 @@ def get_conditions(metar_info):
     speed = gust = 0
     # Visibility
 
-    # Match metric visibility and convert to SM
+    # Match metric visibility and convert to KM and find visibility greater than 9999 = KM
     match = re.search(r'(?P<CAVOK>CAVOK)|(\s(?P<visibility>\d{4}|\/{4})\s)|(\s(?P<visibilityKM>\d{2}.[KM]|\/{2})\s)', metar_info)
     if match.group('visibility'):
         try:
-            visibility = float(match.group('visibility')) / 1609
+            visibility = float(match.group('visibility')) / 1000
         except ValueError:
             visibility = 10
     if match.group('CAVOK'):
@@ -37,7 +37,7 @@ def get_conditions(metar_info):
     if match.group('visibilityKM'):
         visibility = 10
 
-    # Match SM Visibility
+    # Match SM Visibility and convert to KM
     # We may have fractions, e.g. 1/8SM or 1 1/2SM
     # Or it will be whole numbers, e.g. 2SM
     # There's also variable wind speeds, followed by vis, e.g. 300V360 1/2SM
@@ -45,11 +45,13 @@ def get_conditions(metar_info):
     if match:
         visibility = match.group('visibility')
         try:
-            visibility = float(sum(Fraction(s) for s in visibility.split()))
+            visibility = float(sum(Fraction(s) for s in visibility.split())) * 1609 / 1000
         except ZeroDivisionError:
             visibility = None
-    # Ceiling
-    match = re.search(r'(SCT|VV|BKN|OVC)(?P<ceiling>\d{3})', metar_info)
+    # Ceiling for SCT and BKN and OVC
+    # match = re.search(r'(VV|SCT|BKN|OVC)(?P<ceiling>\d{3})', metar_info)
+    # Alternative ceiling only for BKN and OVC > more practicable
+    match = re.search(r'(VV|BKN|OVC)(?P<ceiling>\d{3})', metar_info)
     if match:
         ceiling = int(match.group('ceiling')) * 100  # It is reported in hundreds of feet
     # Wind info
@@ -71,15 +73,36 @@ def get_flight_category(visibility, ceiling):
         ceiling = 10000
 
     # http://www.faraim.org/aim/aim-4-03-14-446.html
-    try:
-        if visibility < 1 or ceiling < 500:
+    # Visibility thresholds in KM
+    #try:
+    #    if visibility < 1 or ceiling < 500:
+    #        return FlightCategory.LIFR
+    #    elif 1 <= visibility < 3 or 500 <= ceiling < 1000:
+    #        return FlightCategory.IFR
+    #    elif 3 <= visibility <= 5 or 1000 <= ceiling <= 3000:
+    #        return FlightCategory.MVFR
+    #    elif visibility > 5 and ceiling > 3000:
+    #        return FlightCategory.VFR
+    
+    # Visibilty thresholds mapped to a more VFR-like decission matrix near to European GAFOR reporting
+    # airports.py has also to be changed to get als metar data to be parsed by this section
+    # VFR = Blue sky, no clouds below 5000 feet and visibility 10km or more
+    # MVFR = Visibilty more than 8km and acceptable ceiling
+    # IFR = critical for VFR
+    # LIFR = no VFR possible
+        try:
+        if visibility < 8 or ceiling < 1500:
             return FlightCategory.LIFR
-        elif 1 <= visibility < 3 or 500 <= ceiling < 1000:
+        elif visibility >= 8 and ceiling < 2500:
             return FlightCategory.IFR
-        elif 3 <= visibility <= 5 or 1000 <= ceiling <= 3000:
+        elif visibility >= 8 and 2500 <= ceiling < 5000:
             return FlightCategory.MVFR
-        elif visibility > 5 and ceiling > 3000:
+        elif 8 <= visibility < 9.999  and ceiling >= 5000 :
+            return FlightCategory.MVFR
+        elif visibility >= 9.999 and ceiling >= 5000:
             return FlightCategory.VFR
+
+    
     except (TypeError, ValueError):
         log.exception('Failed to get flight category from {vis}, {ceil}'.format(
             vis=visibility,
