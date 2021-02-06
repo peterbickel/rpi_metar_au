@@ -99,12 +99,13 @@ class Airport(object):
             pass
 
         # Flight categories. First automatic, then manual parsing.
-        try:
-            if metar['flight_category'] is None:
-                log.error('flight category is missing: {}', metar)
-            self.category = wx.FlightCategory[metar['flight_category']]
-        except KeyError:
-            log.info('%s does not have flight category field, falling back to raw text parsing.', self.code)
+        # Commenting out the following lines will parse all METAR into WX.PY for individual thresholds.
+        #try:
+        #    if metar['flight_category'] is None:
+        #        log.error('flight category is missing: {}', metar)
+        #    self.category = wx.FlightCategory[metar['flight_category']]
+        #except KeyError:
+        #    log.info('%s does not have flight category field, falling back to raw text parsing.', self.code)
             self.visibility, self.ceiling, self.wind_speed, self.wind_gusts = wx.get_conditions(metar['raw_text'])
             self.category = wx.get_flight_category(self.visibility, self.ceiling)
 
